@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>fin</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    background: radial-gradient(circle at top, #0d1a0d 0%, #000000 70%);
+    font-family: 'Segoe UI', Arial, sans-serif;
+    min-height: 100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding: 20px;
+  }
+  .card {
+    max-width: 420px;
+    width:100%;
+    background: linear-gradient(180deg,#0f1f0f 0%, #060c06 100%);
+    border: 1px solid #d4af37;
+    border-radius: 20px;
+    padding: 34px 24px;
+    text-align:center;
+    box-shadow: 0 0 40px rgba(212,175,55,0.25), 0 0 80px rgba(0,150,0,0.15);
+  }
+  .ring-wrap {
+    position:relative;
+    width:150px;
+    height:150px;
+    margin: 0 auto 20px;
+  }
+  .ring {
+    position:absolute;
+    top:0; left:0;
+    width:150px; height:150px;
+    border-radius:50%;
+    background: conic-gradient(from 0deg, #d4af37, #1a8f1a, #d4af37, #1a8f1a, #d4af37);
+    animation: spin 4s linear infinite;
+  }
+  @keyframes spin { 100% { transform: rotate(360deg); } }
+  .dp {
+    position:absolute;
+    top:6px; left:6px;
+    width:138px; height:138px;
+    border-radius:50%;
+    background-size: cover;
+    background-position: center;
+    border: 3px solid #060c06;
+  }
+  .brand {
+    font-size: 28px;
+    font-weight:800;
+    letter-spacing:1px;
+    background: linear-gradient(90deg,#d4af37,#f5e08a,#d4af37);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom:4px;
+  }
+  .sub {
+    color:#3ecf3e;
+    font-size:15px;
+    font-weight:600;
+    letter-spacing:2px;
+    margin-bottom:18px;
+    text-transform:uppercase;
+  }
+  .tagline {
+    color:#cfcfcf;
+    font-size:14px;
+    line-height:1.6;
+    margin-bottom:22px;
+  }
+  .badges {
+    display:flex;
+    justify-content:center;
+    gap:8px;
+    flex-wrap:wrap;
+    margin-bottom:24px;
+  }
+  .badge {
+    background: rgba(212,175,55,0.1);
+    border:1px solid #d4af37;
+    color:#d4af37;
+    font-size:11px;
+    padding:6px 12px;
+    border-radius:20px;
+    font-weight:600;
+  }
+  .join-btn {
+    display:inline-block;
+    width:100%;
+    background: linear-gradient(90deg,#1a8f1a,#2fbf2f);
+    color:#fff;
+    font-size:17px;
+    font-weight:700;
+    padding:15px 0;
+    border-radius:12px;
+    text-decoration:none;
+    border:none;
+    cursor:pointer;
+    animation: pulse 1.6s infinite;
+    box-shadow: 0 0 15px rgba(47,191,47,0.5);
+  }
+  @keyframes pulse {
+    0% { box-shadow: 0 0 0 0 rgba(47,191,47,0.6); }
+    70% { box-shadow: 0 0 0 14px rgba(47,191,47,0); }
+    100% { box-shadow: 0 0 0 0 rgba(47,191,47,0); }
+  }
+  .disclaimer {
+    color:#777;
+    font-size:10.5px;
+    margin-top:18px;
+    line-height:1.5;
+  }
+  .footer {
+    margin-top:22px;
+    color:#555;
+    font-size:11px;
+    letter-spacing:1px;
+  }
+  .footer span { color:#d4af37; font-weight:600; }
+
+  .legal-links {
+    margin-top:16px;
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:center;
+    gap:10px;
+    font-size:11px;
+  }
+  .legal-links a {
+    color:#8fbf8f;
+    text-decoration:underline;
+    cursor:pointer;
+  }
+
+  .modal-overlay {
+    display:none;
+    position:fixed;
+    top:0; left:0;
+    width:100%; height:100%;
+    background:rgba(0,0,0,0.75);
+    z-index:1000;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+  }
+  .modal-overlay.active { display:flex; }
+  .modal-box {
+    background:#0a140a;
+    border:1px solid #d4af37;
+    border-radius:14px;
+    max-width:380px;
+    width:100%;
+    padding:26px 22px;
+    position:relative;
+    text-align:center;
+    box-shadow:0 0 40px rgba(212,175,55,0.25);
+  }
+  .modal-close {
+    position:absolute;
+    top:12px; right:14px;
+    color:#d4af37;
+    font-size:20px;
+    cursor:pointer;
+    background:none;
+    border:none;
+  }
+  .modal-box h3 {
+    color:#f5e08a;
+    font-size:19px;
+    margin-bottom:14px;
+  }
+  .modal-box p {
+    color:#cfcfcf;
+    font-size:13.5px;
+    line-height:1.7;
+    margin-bottom:20px;
+    text-align:left;
+  }
+  .modal-btn-row {
+    display:flex;
+    gap:10px;
+  }
+  .modal-btn {
+    flex:1;
+    padding:12px;
+    border-radius:10px;
+    font-weight:700;
+    font-size:14px;
+    cursor:pointer;
+    border:1px solid #d4af37;
+  }
+  .modal-btn.cancel {
+    background:transparent;
+    color:#d4af37;
+  }
+  .modal-btn.confirm {
+    background:linear-gradient(90deg,#1a8f1a,#2fbf2f);
+    color:#fff;
+    border:none;
+  }
+  .modal-btn.close-single {
+    background:transparent;
+    color:#d4af37;
+    width:100%;
+  }
+  .telegram-icon {
+    width:50px; height:50px;
+    margin:0 auto 14px;
+    border:1px solid #2fbf2f;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:#2fbf2f;
+    font-size:22px;
+  }
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="ring-wrap">
+    <div class="ring"></div>
+    <div class="dp" id="dpImg"></div>
+  </div>
+  <div class="brand"> FIN GROWTH ACADEMY</div>
+  <div class="sub">Tr@ding Community</div>
+  <p class="tagline">
+    Trusted market updates &amp; insights.<br>
+    Discipline | Strategy | Consistency
+  </p>
+  <div class="badges">
+    <div class="badge">📊 Market Insights</div>
+    <div class="badge">🎯 Discipline</div>
+    <div class="badge">📈 Strategy</div>
+  </div>
+
+  <a href="https://t.me/+viOzrf3qeIo4ZjRl" class="join-btn" id="joinBtn">Join Telegram Channel</a>
+
+  <p class="disclaimer">
+    Educational &amp; informational purpose only. Not SEBI registered investment advice. Markets are subject to risk — please do your own research before any decision.
+  </p>
+
+  <div class="legal-links">
+    <a onclick="openModal('privacyModal')">Privacy Policy</a>
+    <a onclick="openModal('termsModal')">Terms &amp; Conditions</a>
+    <a onclick="openModal('disclaimerModal')">Disclaimer</a>
+    <a onclick="openModal('contactModal')">Contact Us</a>
+  </div>
+
+</div>
+
+<!-- Privacy Policy Modal -->
+<div class="modal-overlay" id="privacyModal">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal('privacyModal')">&times;</button>
+    <h3>Privacy Policy</h3>
+    <p>We respect your privacy. Joining this Telegram channel does not require sharing personal information beyond your Telegram username. We do not sell or share your data with third parties.</p>
+    <button class="modal-btn close-single" onclick="closeModal('privacyModal')">Close</button>
+  </div>
+</div>
+
+<!-- Terms & Conditions Modal -->
+<div class="modal-overlay" id="termsModal">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal('termsModal')">&times;</button>
+    <h3>Terms &amp; Conditions</h3>
+    <p>By joining this Telegram channel, you agree to receive updates and content shared by the channel admin. Membership is voluntary and you may leave the channel at any time.</p>
+    <button class="modal-btn close-single" onclick="closeModal('termsModal')">Close</button>
+  </div>
+</div>
+
+<!-- Disclaimer Modal -->
+<div class="modal-overlay" id="disclaimerModal">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal('disclaimerModal')">&times;</button>
+    <h3>Disclaimer</h3>
+    <p>Any market or financial information shared on this channel is for educational purposes only and does not constitute financial advice. Please do your own research before making decisions.</p>
+    <button class="modal-btn close-single" onclick="closeModal('disclaimerModal')">Close</button>
+  </div>
+</div>
+
+<!-- Contact Us Modal -->
+<div class="modal-overlay" id="contactModal">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal('contactModal')">&times;</button>
+    <h3>Contact Us</h3>
+    <p>For queries, reach out directly through the Telegram channel linked on this page.</p>
+    <button class="modal-btn close-single" onclick="closeModal('contactModal')">Close</button>
+  </div>
+</div>
+
+
+
+<script>
+   document.getElementById('dpImg').style.backgroundImage = "url(logo.jpg)";
+</script>
+
+<script>
+function openModal(id){document.getElementById(id).classList.add('active');}
+function closeModal(id){document.getElementById(id).classList.remove('active');}
+
+// Bot-filter: button stays locked until real user interaction is detected
+var joinBtn = document.getElementById('joinBtn');
+var unlocked = false;
+var realHref = joinBtn.getAttribute('href');
+joinBtn.removeAttribute('href');
+
+function armUnlock(){
+  unlocked = true;
+  joinBtn.setAttribute('href', realHref);
+  window.removeEventListener('scroll', armUnlock);
+  window.removeEventListener('touchstart', armUnlock);
+  window.removeEventListener('mousemove', armUnlock);
+}
+
+window.addEventListener('scroll', armUnlock, {once:true});
+window.addEventListener('touchstart', armUnlock, {once:true});
+window.addEventListener('mousemove', armUnlock, {once:true});
+setTimeout(armUnlock, 800);
+
+joinBtn.addEventListener('click', function(e){
+  e.preventDefault();
+  unlocked = true;
+  if (typeof fbq === 'function') { fbq('track', 'Subscribe'); }
+  window.location.href = realHref;
+});
+</script>
+
+</body>
+</html>
